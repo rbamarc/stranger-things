@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../config";
+import { Link } from "react-router-dom";
 
 export default function LoginForm() {
     const [username, setUsername] = useState('')
@@ -58,7 +59,11 @@ export default function LoginForm() {
                 required
                 />
             </div>
-            <button type="submit">Login</button>
+             <button type="submit">Login</button>
+             <p>If you don't have an account, you can sign up</p>
+             <Link to={'/signup'}>
+                 <button>Sign Up</button>
+             </Link>
         </form>
   );
 }
