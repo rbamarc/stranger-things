@@ -6,6 +6,7 @@ const PostList = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedPost, setSelectedPost] = useState(null);
+  const [shouldReload, setShouldReload] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,8 +20,9 @@ const PostList = () => {
         setIsLoading(false);
       }
     };
+    setShouldReload(false)
     fetchData();
-  }, []);
+  }, [shouldReload]);
 
   const selectPost = (post) => {
     setSelectedPost(post);

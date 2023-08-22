@@ -4,7 +4,7 @@ import DeletePost from "./DeletePost";
 import EditPostForm from "./EditPost";
 import { useNavigate } from "react-router-dom";
 
-const SelectedPost = ({ post, hidePost, onPostDelete }) => {
+const SelectedPost = ({ post, hidePost, onPostDelete, onPostUpdate }) => {
   const navigate = useNavigate();  // Initialize the navigate function
   const [showMessageForm, setShowMessageForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
@@ -18,8 +18,12 @@ const SelectedPost = ({ post, hidePost, onPostDelete }) => {
   };
 
   const handleUpdate = (updatedPost) => {
-    setShowEditForm(false);
+      setShowEditForm(false);
+      onPostUpdate()
   };
+    const triggerReload = () => {
+        setShouldReload(true)
+    }
 
   return (
     <div>
