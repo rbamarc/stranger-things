@@ -3,17 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../config';
 
 const SignUpForm = () => {
-  const navigate = useNavigate();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate()
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     if (password !== confirmPassword) {
-      setErrorMessage('Passwords do not match');
+      setErrorMessage('Passwords do not match')
       return;
     }
 
@@ -29,19 +29,16 @@ const SignUpForm = () => {
             password,
           },
         }),
-      });
+      })
 
-      const result = await response.json();
+      const result = await response.json()
       
       if (result.success) {
-        
-        localStorage.setItem('auth-token', result.data.token);
-        
-        
-        navigate('/dashboard');
+        localStorage.setItem('auth-token', result.data.token)
+        navigate('/dashboard')
       } else {
         
-        setErrorMessage(result.error.message);
+        setErrorMessage(result.error.message)
       }
     } catch (error) {
       setErrorMessage('There was an error registering your account');
@@ -80,7 +77,7 @@ const SignUpForm = () => {
       <button type="submit">Sign Up</button>
       {errorMessage && <p>{errorMessage}</p>}
     </form>
-  );
-};
+  )
+}
 
-export default SignUpForm;
+export default SignUpForm

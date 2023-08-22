@@ -1,63 +1,96 @@
-import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 import { BASE_URL } from '../config';
 
-const Dashboard = () => {
-    const navigate = useNavigate();
-    const [posts, setPosts] = useState([])
-    const [userData, setUserData] = useState('')
+export default function Dashboard() {
+  const [username, setUsername] = useState('');
+  const [userId, setUserId] = useState('');
+  const [posts, setPosts] = useState([]);
+    const [userPosts, setUserPosts] = useState([]);
+    const [messages, setMessages] = useState([])
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = localStorage.getItem('auth-token');
+      try {
+        const response = await fetch(`${BASE_URL}/users/me`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization' : `Bearer ${token}`
+          }
+        });
+        const result = await response.json();
+        setUsername(result.data.username);
+        setUserId(result.data._id);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/posts`);
+        const result = await response.json();
+        setPosts(result.data.posts);
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      }
+    };
+    fetchPosts();
+  }, []);
+
+  useEffect(() => {
+    const userPosts = posts.filter(post => post.author._id === userId);
+    setUserPosts(userPosts);
+  }, [posts, userId]);
+    
     useEffect(() => {
-        const fetchUserData = async () => {
+        const fetchMessages = async () => {
+            const token = localStorage.getItem('auth-token')
             try {
-                const token = localStorage.getItem('auth-token')
-                if (!token) {
-                    navigate('/login')
-                    return
-                }
-                const response = await fetch(`${BASE_URL}/user/me`, {
+                const response = await fetch(`${BASE_URL}/users/me`, {
+                    method: 'GET',
                     headers: {
+                        'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
-                    },
-                })
-                const results = await response.json()
-                setUserData(results)
-
-                const userPostResponse = await fetch(`${BASE_URL}/users/${results.data.id}/posts`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
                     }
                 })
-                const userPostResults = await userPostResponse.json()
-                setPosts(userPostResults)
+                const results = await response.json()
+                console.log(results)
+                setMessages(results.data.messages)
             } catch (error) {
-                console.log('Error fetching user data', error)
+                console.error(error)
             }
         }
-        fetchUserData()
+
+        fetchMessages()
     },[])
-  
-  const handleLogout = () => {
-    localStorage.removeItem('auth-token');
-    navigate('/login');
-  };
 
   return (
     <div>
-      <h1>Dashboard</h1>
-          <button onClick={handleLogout}>Logout</button>
-          <h2>Welcome, {userData ? userData.username : 'loading...'}</h2>
+      <h2>Welcome, {username}!</h2>
       <h3>Your Posts:</h3>
       <ul>
-        {posts.map((post, index) => (
+        {userPosts.map((post, index) => (
           <li key={index}>
             <h5>{post.title}</h5>
+            <p>{post.description}</p>
             <p>{post.price}</p>
+            <p>{post.location}</p>
+          </li>
+        ))}
+          </ul>
+          <h3>Your Messages:</h3>
+      <ul>
+        {messages.map((message, index) => (
+          <li key={index}>
+            <p>{message.content}</p>
           </li>
         ))}
       </ul>
     </div>
   );
-};
-
-export default Dashboard;
+}

@@ -9,7 +9,9 @@ const MessageForm = ({ toggleForm, postId }) => {
     e.preventDefault();
     const token = localStorage.getItem('auth-token')
       const data = {
-          message: message
+          message: {
+            content: message
+        }
       }
       try {
           const response = await fetch(`${BASE_URL}/posts/${postId}/messages`, {

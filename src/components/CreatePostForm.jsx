@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { BASE_URL } from "../config";
+import { useNavigate } from "react-router-dom";
+import AppNavbar from "./AppNavbar";
 
 export default function CreatePostForm() {
     const [title, setTitle] = useState('');
@@ -7,6 +9,7 @@ export default function CreatePostForm() {
     const [willDeliver, setWillDeliver] = useState(false);
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState('');
+    const navigate = useNavigate()
     
     
     const handleSubmit = async (e) => {
@@ -34,13 +37,17 @@ export default function CreatePostForm() {
 
         if (results.success) {
             console.log("Post created:", results.data);
+            navigate('/')
         } else {
             console.error('Error creating post:', results.error);
         }
     };
     
     return (
-        <form onSubmit={handleSubmit}>
+        <>
+            
+            <div>
+            <form onSubmit={handleSubmit}>
             <label>
                 <p>Enter Title:</p>
             </label>
@@ -80,5 +87,7 @@ export default function CreatePostForm() {
             <input type='text' value={price} onChange={(e) => setPrice(e.target.value)} placeholder='Price' />
             <button type="submit">Submit</button>
          </form>
+        </div>
+        </>
      );
 }
