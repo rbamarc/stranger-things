@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import { BASE_URL } from '../config';
+import Card from 'react-bootstrap/Card';
+import Accordion from 'react-bootstrap/Accordion';
+import Logout from './Logout';
 
 export default function Dashboard() {
   const [username, setUsername] = useState('');
@@ -45,7 +48,7 @@ export default function Dashboard() {
   useEffect(() => {
     const userPosts = posts.filter(post => post.author._id === userId);
     setUserPosts(userPosts);
-  }, [posts, userId]);
+  }, [posts, userId])
     
     useEffect(() => {
         const fetchMessages = async () => {
@@ -70,27 +73,35 @@ export default function Dashboard() {
     },[])
 
   return (
-    <div>
-      <h2>Welcome, {username}!</h2>
-      <h3>Your Posts:</h3>
-      <ul>
+      <div>
+          <h2 className='welcome-header'>Welcome, {username}!</h2>
+          <div className="logout-container">
+              <Logout className='logout-button' />
+          </div>
+      <h3 className='post-header'>Your Posts:</h3>
+      <Accordion defaultActiveKey="0">
         {userPosts.map((post, index) => (
-          <li key={index}>
-            <h5>{post.title}</h5>
-            <p>{post.description}</p>
-            <p>{post.price}</p>
-            <p>{post.location}</p>
-          </li>
+          <Accordion.Item key={index} eventKey={index.toString()}>
+            <Accordion.Header>{post.title}</Accordion.Header>
+            <Accordion.Body>
+              <p>{post.description}</p>
+              <p>{post.price}</p>
+              <p>{post.location}</p>
+            </Accordion.Body>
+          </Accordion.Item>
         ))}
-          </ul>
-          <h3>Your Messages:</h3>
-      <ul>
-        {messages.map((message, index) => (
-          <li key={index}>
-            <p>{message.content}</p>
-          </li>
-        ))}
-      </ul>
+      </Accordion>
+
+      <h3 className='message-header'>Your Messages:</h3>
+      {messages.map((message, index) => (
+        <Card key={index} style={{ width: '50rem', margin: '1rem 0' }}>
+          <Card.Body>
+            <Card.Text>
+              {message.content}
+            </Card.Text>
+          </Card.Body>
+        </Card>
+      ))}
     </div>
-  );
+  )
 }

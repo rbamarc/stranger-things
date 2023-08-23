@@ -11,7 +11,7 @@ function AppNavbar() {
           <Nav className="me-auto">
             <Nav.Link href="/">Posts</Nav.Link>
             <Nav.Link href="/login">Login</Nav.Link>
-            <Nav.Link href="/create">make post</Nav.Link>
+            <Nav.Link href="/create">Create post</Nav.Link>
             <Nav.Link href="/dashboard">Dashboard</Nav.Link>
           </Nav>
         </Container>

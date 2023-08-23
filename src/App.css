@@ -76,3 +76,15 @@ a:hover {
   height: 100vh;
   
 }
+
+.welcome-header{
+  text-align: center;
+}
+
+.logout-container {
+  text-align: center;
+}
+
+.logout-button {
+  display: inline-block;
+}
