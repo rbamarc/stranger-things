@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { BASE_URL } from "../config";
-import { Link } from "react-router-dom";
+import { Button, Form } from 'react-bootstrap';
 
 export default function LoginForm() {
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
-    const navigate = useNavigate()
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     const handleLogin = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
         try {
             const response = await fetch(`${BASE_URL}/users/login`, {
@@ -23,47 +23,47 @@ export default function LoginForm() {
                         password: password,
                     },
                 }),
-            })
+            });
 
-            const result = await response.json()
+            const result = await response.json();
             
             if (result.success) {
-                localStorage.setItem('auth-token', result.data.token)
-                navigate('/dashboard')
+                localStorage.setItem('auth-token', result.data.token);
+                navigate('/dashboard');
             } 
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
+    };
 
-    }
+    return (
+        <Form onSubmit={handleLogin}>
+            <Form.Group className="mb-3" controlId="formUsername">
+                <Form.Label>Username</Form.Label>
+                <Form.Control
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                />
+            </Form.Group>
 
-     return (
-        <form onSubmit={handleLogin}>
-            <div>
-                <label htmlFor="username">Username:</label>
-                <input
-                type="text"
-                id="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
+            <Form.Group className="mb-3" controlId="formPassword">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
                 />
-            </div>
-            <div>
-                <label htmlFor="password">Password:</label>
-                <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                />
-            </div>
-             <button type="submit">Login</button>
-             <p>If you don't have an account, you can sign up</p>
-             <Link to={'/signup'}>
-                 <button>Sign Up</button>
-             </Link>
-        </form>
-  );
+            </Form.Group>
+            
+            <Button variant="primary" type="submit">
+                Login
+            </Button>
+            <p className="mt-3">
+                If you don't have an account, you can sign up <Link to="/signup">here</Link>.
+            </p>
+        </Form>
+    );
 }

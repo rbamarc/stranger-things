@@ -1,11 +1,13 @@
-import { useState } from "react";
-import MessageForm from "./MessageForm";
-import DeletePost from "./DeletePost";
-import EditPostForm from "./EditPost";
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
+import MessageForm from './MessageForm';
+import DeletePost from './DeletePost';
+import EditPostForm from './EditPost';
+import { useState } from 'react';
 
 const SelectedPost = ({ post, hidePost, onPostDelete, onPostUpdate }) => {
-  const navigate = useNavigate();  // Initialize the navigate function
+  
   const [showMessageForm, setShowMessageForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
 
@@ -18,37 +20,48 @@ const SelectedPost = ({ post, hidePost, onPostDelete, onPostUpdate }) => {
   };
 
   const handleUpdate = (updatedPost) => {
-      setShowEditForm(false);
-      onPostUpdate()
+    setShowEditForm(false);
+    onPostUpdate();
+    hidePost();
   };
-    const triggerReload = () => {
-        setShouldReload(true)
-    }
 
   return (
-    <div>
-      <h2>{post.title}</h2>
-      <p>{post.description}</p>
-      <p>Price: {post.price}</p>
-      <p>Location: {post.location}</p>
-      <p>Will deliver: {post.willDeliver ? "Yes" : "No"}</p>
-      <p>{post.author.username}</p>
+    <Card style={{ width: '50rem', margin: '1rem' }}>
+      <Card.Body>
+        <Card.Title>{post.title}</Card.Title>
+        <Card.Text>
+          {post.description}
+        </Card.Text>
+        <Card.Text>
+          Price: {post.price}
+        </Card.Text>
+        <Card.Text>
+          Location: {post.location}
+        </Card.Text>
+        <Card.Text>
+          Will deliver: {post.willDeliver ? "Yes" : "No"}
+        </Card.Text>
+        <Card.Text>
+          Author: {post.author.username}
+        </Card.Text>
+        
+        {showMessageForm ? (
+          <MessageForm toggleForm={toggleMessageForm} postId={post._id} />
+        ) : (
+          <Button variant="primary" onClick={toggleMessageForm}>Send Message</Button>
+        )}
 
-      {showMessageForm ? (
-        <MessageForm toggleForm={toggleMessageForm} postId={post._id} />
-      ) : (
-        <button onClick={toggleMessageForm}>Send Message</button>
-      )}
+        {showEditForm ? (
+          <EditPostForm post={post} onUpdate={handleUpdate} />
+        ) : (
+          <Button variant="secondary" onClick={toggleEditForm}>Edit post</Button>
+        )}
 
-      {showEditForm ? (
-        <EditPostForm post={post} onUpdate={handleUpdate} />
-      ) : (
-        <button onClick={toggleEditForm}>Edit post</button>
-      )}
-      
-      <DeletePost postId={post} onPostDelete={onPostDelete} hidePost={hidePost} />
-      <button onClick={hidePost}>Back to list</button>
-    </div>
+        <DeletePost postId={post} onPostDelete={onPostDelete} hidePost={hidePost} />
+        
+        <Button variant="dark" onClick={hidePost}>Back to list</Button>
+      </Card.Body>
+    </Card>
   );
 };
 

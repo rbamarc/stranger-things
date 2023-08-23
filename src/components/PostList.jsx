@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import SelectedPost from './SelectedPost';
+import Card from 'react-bootstrap/Card';
 
 const PostList = () => {
   const [data, setData] = useState(null);
@@ -15,6 +16,7 @@ const PostList = () => {
         const result = await response.json();
         setData(result);
         setIsLoading(false);
+        setShouldReload(false)
       } catch (error) {
         setError(error);
         setIsLoading(false);
@@ -38,23 +40,33 @@ const PostList = () => {
     setData(updatedData);
   };
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
+  const triggerDataReload = () => {
+    setShouldReload(true)
+    console.log('reload triggered')
+  }
+
+  if (isLoading) return <div className="loading">Loading...</div>;
+  if (error) return <div className="error-message">Error: {error.message}</div>;
 
   return (
-    <div>
+    <div className="post-list-container">
       {selectedPost ? (
-        <SelectedPost post={selectedPost} hidePost={hidePost} onPostDelete={onPostDelete} />
+        <SelectedPost post={selectedPost} hidePost={hidePost} onPostDelete={onPostDelete} onPostUpdate={triggerDataReload} />
       ) : (
         data.data.posts.map((post, index) => (
-          <li key={index}>
-            <a onClick={() => selectPost(post)}>
-              <h5>{post.title}</h5>
-            </a>
-            <p>{post.description}</p>
-            <p>{post.price}</p>
-            <p>{post.location}</p>
-          </li>
+          <Card key={index} style={{ width: '50rem', margin: '1rem' }}>
+            <Card.Body>
+              <Card.Title>{post.title}</Card.Title>
+              <Card.Subtitle className="mb-2 text-muted">{post.location}</Card.Subtitle>
+              <Card.Text>
+                {post.description}
+              </Card.Text>
+              <Card.Text>
+                Price: {post.price}
+              </Card.Text>
+              <a onClick={() => selectPost(post)} style={{cursor: 'pointer'}}>View Details</a>
+            </Card.Body>
+          </Card>
         ))
       )}
     </div>
@@ -62,3 +74,4 @@ const PostList = () => {
 };
 
 export default PostList;
+
