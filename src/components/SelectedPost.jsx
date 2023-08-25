@@ -45,7 +45,8 @@ const SelectedPost = ({ post, hidePost, onPostDelete, onPostUpdate }) => {
           Author: {post.author.username}
         </Card.Text>
         
-        {showMessageForm ? (
+        <div className='button-container'>
+          {showMessageForm ? (
           <MessageForm toggleForm={toggleMessageForm} postId={post._id} />
         ) : (
           <Button variant="primary" onClick={toggleMessageForm}>Send Message</Button>
@@ -60,6 +61,7 @@ const SelectedPost = ({ post, hidePost, onPostDelete, onPostUpdate }) => {
         <DeletePost postId={post} onPostDelete={onPostDelete} hidePost={hidePost} />
         
         <Button variant="dark" onClick={hidePost}>Back to list</Button>
+        </div>
       </Card.Body>
     </Card>
   );

@@ -13,9 +13,7 @@ export default function Dashboard() {
     const [userPosts, setUserPosts] = useState([]);
   const [messages, setMessages] = useState([])
   
-  if (!username) {
-  navigate('/login')
-}
+
 
   useEffect(() => {
     const fetchData = async () => {

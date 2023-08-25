@@ -88,3 +88,8 @@ a:hover {
 .logout-button {
   display: inline-block;
 }
+
+.button-container{
+  display: flex;
+  flex-direction: row;
+}
