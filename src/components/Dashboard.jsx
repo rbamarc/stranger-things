@@ -3,13 +3,19 @@ import { BASE_URL } from '../config';
 import Card from 'react-bootstrap/Card';
 import Accordion from 'react-bootstrap/Accordion';
 import Logout from './Logout';
+import { useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
+  const navigate = useNavigate()
   const [username, setUsername] = useState('');
   const [userId, setUserId] = useState('');
   const [posts, setPosts] = useState([]);
     const [userPosts, setUserPosts] = useState([]);
-    const [messages, setMessages] = useState([])
+  const [messages, setMessages] = useState([])
+  
+  if (!username) {
+  navigate('/login')
+}
 
   useEffect(() => {
     const fetchData = async () => {
